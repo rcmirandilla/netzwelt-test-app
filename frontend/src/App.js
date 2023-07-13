@@ -1,10 +1,10 @@
-import "./App.css";
-
 import Root from "./modules/Root";
 import Login from "./modules/accounts/pages/Login";
+import getAllTerritoriesLoader from "./modules/territories/loaders/getAllTerritories.loader";
 import GetAllTerritories from "./modules/territories/pages/GetAllTerritories";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +14,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <GetAllTerritories />,
+        loader: getAllTerritoriesLoader,
       },
       {
         path: "/accounts/login",
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ChakraProvider>
+      <RouterProvider router={router} />
+    </ChakraProvider>
+  );
 }
 
 export default App;
