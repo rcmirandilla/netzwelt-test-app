@@ -5,22 +5,24 @@ import GetAllTerritories from "./modules/territories/pages/GetAllTerritories";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
+import rootLoader from "./modules/root.loader";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    loader: rootLoader,
     children: [
       {
         path: "/",
         element: <GetAllTerritories />,
         loader: getAllTerritoriesLoader,
       },
-      {
-        path: "/accounts/login",
-        element: <Login />,
-      },
     ],
+  },
+  {
+    path: "/accounts/login",
+    element: <Login />,
   },
 ]);
 

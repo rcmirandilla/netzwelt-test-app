@@ -7,6 +7,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Center,
   FormControl,
   FormLabel,
   FormErrorMessage,
@@ -17,6 +18,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 async function login(data) {
   const res = await fetch("/api/accounts/login", {
@@ -40,6 +42,9 @@ export default function Login() {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [show, setShow] = useState(false);
+
+  const navigate = useNavigate();
+
   const handleClick = () => setShow(!show);
 
   const [credentials, setCredentials] = useState({
@@ -69,57 +74,62 @@ export default function Login() {
     const response = await login(data);
     if (response.status === 404) {
       setError(response.message);
+    } else if (response.status === 200) {
+      sessionStorage.setItem("user", JSON.stringify(response.data));
+      navigate("/");
     }
     setIsSubmitting(false);
   }
 
   return (
-    <Card variant="outline" p={4} w="640px">
-      <CardHeader>
-        <Heading size="lg">Login</Heading>
-        <Text fontSize="sm">Please enter your credentials to continue</Text>
-      </CardHeader>
-      <CardBody>
-        <VStack spacing={4} alignItems="flex-start">
-          <FormControl isRequired isInvalid={error}>
-            <FormLabel>Username</FormLabel>
-            <Input
-              type="text"
-              value={credentials.username}
-              onChange={handleChangeUsername}
-            />
-          </FormControl>
-          <FormControl isRequired isInvalid={error}>
-            <FormLabel>Password</FormLabel>
-            <InputGroup size="md">
+    <Center minH="100vh" bg="gray.100">
+      <Card variant="outline" p={4} w="640px">
+        <CardHeader>
+          <Heading size="lg">Login</Heading>
+          <Text fontSize="sm">Please enter your credentials to continue</Text>
+        </CardHeader>
+        <CardBody>
+          <VStack spacing={4} alignItems="flex-start">
+            <FormControl isRequired isInvalid={error}>
+              <FormLabel>Username</FormLabel>
               <Input
-                pr="4.5rem"
-                type={show ? "text" : "password"}
-                value={credentials.password}
-                onChange={handleChangePassword}
-                placeholder="Enter password"
+                type="text"
+                value={credentials.username}
+                onChange={handleChangeUsername}
               />
-              <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={handleClick}>
-                  {show ? "Hide" : "Show"}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            <FormErrorMessage>{error && error}</FormErrorMessage>
-          </FormControl>
+            </FormControl>
+            <FormControl isRequired isInvalid={error}>
+              <FormLabel>Password</FormLabel>
+              <InputGroup size="md">
+                <Input
+                  pr="4.5rem"
+                  type={show ? "text" : "password"}
+                  value={credentials.password}
+                  onChange={handleChangePassword}
+                  placeholder="Enter password"
+                />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handleClick}>
+                    {show ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              <FormErrorMessage>{error && error}</FormErrorMessage>
+            </FormControl>
 
-          <Box mt={4} width="100%">
-            <Button
-              isLoading={isSubmitting}
-              w="100%"
-              onClick={() => handleLogin(credentials)}
-            >
-              Log In
-            </Button>
-          </Box>
-        </VStack>
-      </CardBody>
-      <CardFooter></CardFooter>
-    </Card>
+            <Box mt={4} width="100%">
+              <Button
+                isLoading={isSubmitting}
+                w="100%"
+                onClick={() => handleLogin(credentials)}
+              >
+                Log In
+              </Button>
+            </Box>
+          </VStack>
+        </CardBody>
+        <CardFooter></CardFooter>
+      </Card>
+    </Center>
   );
 }

@@ -16,10 +16,17 @@ router.post("/login", async function (req, res, next) {
 
   const data = await result.json();
 
-  res.json({
-    status: result.status,
-    message: data.message,
-  });
+  if (result.status === 200) {
+    res.json({
+      status: result.status,
+      data: data,
+    });
+  } else if (result.status === 404) {
+    res.json({
+      status: result.status,
+      message: data.message,
+    });
+  }
 });
 
 module.exports = router;
