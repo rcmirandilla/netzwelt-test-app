@@ -14,7 +14,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/accounts", accountsRouter);
-app.use("/territories", territoriesRouter);
+app.use("/api/accounts", accountsRouter);
+app.use("/api/territories", territoriesRouter);
+
+app.get("/*", (req, res, next) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 module.exports = app;

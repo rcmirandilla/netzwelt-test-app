@@ -18,8 +18,27 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
+async function login(data) {
+  const res = await fetch("/api/accounts/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
+}
+
 export default function Login() {
   const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
@@ -45,11 +64,13 @@ export default function Login() {
   }
 
   async function handleLogin(data) {
+    setIsSubmitting(true);
     setError(null);
-    // const response = await postData(data);
-    // if (response.status === 404) {
-    //   setError(response.message);
-    // }
+    const response = await login(data);
+    if (response.status === 404) {
+      setError(response.message);
+    }
+    setIsSubmitting(false);
   }
 
   return (
@@ -88,7 +109,11 @@ export default function Login() {
           </FormControl>
 
           <Box mt={4} width="100%">
-            <Button w="100%" onClick={() => handleLogin(credentials)}>
+            <Button
+              isLoading={isSubmitting}
+              w="100%"
+              onClick={() => handleLogin(credentials)}
+            >
               Log In
             </Button>
           </Box>

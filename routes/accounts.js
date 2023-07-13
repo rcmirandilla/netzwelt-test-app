@@ -13,9 +13,13 @@ router.post("/login", async function (req, res, next) {
       body: JSON.stringify(req.body),
     }
   );
+
   const data = await result.json();
 
-  res.json(data);
+  res.json({
+    status: result.status,
+    message: data.message,
+  });
 });
 
 module.exports = router;
