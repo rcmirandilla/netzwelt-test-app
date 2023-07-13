@@ -4,6 +4,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 var accountsRouter = require("./routes/accounts");
+var territoriesRouter = require("./routes/territories");
 
 var app = express();
 
@@ -14,5 +15,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/accounts", accountsRouter);
+app.use("/territories", territoriesRouter);
 
 module.exports = app;

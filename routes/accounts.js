@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
 
-/* GET users listing. */
 router.post("/login", async function (req, res, next) {
   const result = await fetch(
     "https://netzwelt-devtest.azurewebsites.net/Account/SignIn",
